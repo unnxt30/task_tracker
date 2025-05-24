@@ -33,9 +33,14 @@ A simple command-line task management application written in Python. All local, 
 #### Add a Task
 ```bash
 python main.py add "Buy groceries"
-python main.py add "Write documentation" --description "Complete the README file"
+python main.py add --description "Complete the README file" "Write documentation" 
 # Short form:
-python main.py add "Review code" -d "Review PR #123"
+python main.py add  -d "Review PR #123" "Review code"
+```
+
+#### Add a Task with a specific due date
+```bash
+python main.py add --due-date "28-05-2025" "Buy groceries"
 ```
 
 #### View All Tasks
@@ -48,6 +53,13 @@ python main.py view
 python main.py view --id 1
 # Short form:
 python main.py view -i 1
+```
+
+#### View Tasks sorted by due-date
+```bash
+python main.py view --sort True
+# Short form:
+python main.py view -s True
 ```
 
 #### Complete a Task
