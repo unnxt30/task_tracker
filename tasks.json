@@ -1,0 +1,10 @@
+{
+  "next_id": 3,
+  "tasks": {
+    "1": {
+      "task": "DISHES",
+      "description": "Clean the dishes",
+      "completed": true
+    }
+  }
+}
