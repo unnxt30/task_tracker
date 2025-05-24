@@ -1,6 +1,6 @@
 import click # type: ignore
 import storage
-
+from datetime import datetime
 
 @click.group()
 def manager():
@@ -9,7 +9,8 @@ def manager():
 
 @click.command()
 @click.option('--id', '-i', help='ID of the task', type=int, default=None)
-def view(id):
+@click.option('--sort', '-s', help='Sort tasks by due date', type=bool, default=False)
+def view(id, sort):
     if id is not None:
         click.secho(f"\n> Task #{id}", fg='cyan', bold=True, underline=True)
         
@@ -47,9 +48,29 @@ def view(id):
             desc_line = f" Description: {task_data['description']}"
             click.secho(desc_line.ljust(49) , fg='bright_black')
         
+        due_date_line = f" Due Date: {task_data['due_date']}"
+        click.secho(due_date_line.ljust(49), fg='bright_blue')
+        
+        days_left = storage.calculate_days_left(task_data['due_date'])
+        if days_left < 0:
+            days_remaining_line = f" Days Remaining: {abs(days_left)} days overdue"
+            days_color = 'red'
+        elif days_left == 0:
+            days_remaining_line = f" Days Remaining: Due today!"
+            days_color = 'yellow'
+        else:
+            days_remaining_line = f" Days Remaining: {days_left} days"
+            days_color = 'green'
+
+        if task_data['completed']:
+            days_remaining_line = f" wohoo you've completed this task!"
+            days_color = 'bright_black'
+        
+        click.secho(days_remaining_line.ljust(49), fg=days_color, bold=True)
+        
         click.secho("└─────────────────────────────────────────────────┘", fg='blue')
         click.echo()
-        
+       
     else:
         click.secho("\n > Your Tasks", fg='cyan', bold=True)
         
@@ -64,6 +85,9 @@ def view(id):
         
         click.echo()
 
+        if sort:
+            tasks['tasks'] = dict(sorted(tasks['tasks'].items(), key=lambda x: x[1]['days_left']))
+    
         for i, (task_id, task_data) in enumerate(tasks['tasks'].items(), 1):
             click.secho("┌─────────────────────────────────────────────────┐", fg='blue')
             
@@ -85,6 +109,26 @@ def view(id):
                 desc_line = f" Description: {task_data['description']}"
                 click.secho(desc_line.ljust(49) , fg='bright_black')
             
+            due_date_line = f" Due Date: {task_data['due_date']}"
+            click.secho(due_date_line.ljust(49), fg='bright_blue')
+            
+            days_left = storage.calculate_days_left(task_data['due_date'])
+            if days_left < 0:
+                days_remaining_line = f" Days Remaining: {abs(days_left)} days overdue"
+                days_color = 'red'
+            elif days_left == 0:
+                days_remaining_line = f" Days Remaining: Due today!"
+                days_color = 'yellow'
+            else:
+                days_remaining_line = f" Days Remaining: {days_left} days"
+                days_color = 'green'
+            
+            if task_data['completed']:
+                days_remaining_line = f" wohoo you've completed this task!"
+                days_color = 'bright_black'
+            
+            click.secho(days_remaining_line.ljust(49), fg=days_color, bold=True)
+            
             click.secho("└─────────────────────────────────────────────────┘", fg='blue')
             
             if i < len(tasks['tasks']):
@@ -93,8 +137,10 @@ def view(id):
 @click.command()
 @click.argument('task')
 @click.option('--description', '-d', help='Description of the task', default='')
-def add(task, description):
-    storage.add_task(task, description)
+@click.option('--due-date', '-due', help='Due date of the task, format: DD-MM-YYYY', default=f"{datetime.now().strftime('%d-%m-%Y')}")
+
+def add(task, description, due_date):
+    storage.add_task(task, description, due_date)
     click.echo(f"Task {task} added successfully")
 
 
