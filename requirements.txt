@@ -1,0 +1,7 @@
+altgraph==0.17.4
+click==8.2.1
+macholib==1.16.3
+packaging==25.0
+pyinstaller==6.13.0
+pyinstaller-hooks-contrib==2025.4
+setuptools==80.8.0

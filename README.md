@@ -2,7 +2,7 @@
 
 A simple command-line task management application written in Python. All local, on your machine.
 
-## 🔧 Requirements
+## Requirements
 
 - Python 3.10+
 - Click library (for CLI interface)

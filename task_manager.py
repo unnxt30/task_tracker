@@ -86,7 +86,7 @@ def view(id, sort):
         click.echo()
 
         if sort:
-            tasks['tasks'] = dict(sorted(tasks['tasks'].items(), key=lambda x: x[1]['days_left']))
+            tasks['tasks'] = dict(sorted(tasks['tasks'].items(), key=lambda x: x[1]['days_left'] and x[1]['completed']))
     
         for i, (task_id, task_data) in enumerate(tasks['tasks'].items(), 1):
             click.secho("┌─────────────────────────────────────────────────┐", fg='blue')
