@@ -23,7 +23,7 @@ A simple command-line task management application written in Python. All local, 
 
 3. **Install dependencies:**
    ```bash
-   pip install click
+   pip install -r requirements.txt
    ```
 
 ## Usage
